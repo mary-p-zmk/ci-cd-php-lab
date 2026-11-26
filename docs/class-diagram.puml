@@ -1,0 +1,156 @@
+
+@startuml
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+hide empty members
+
+class User {
+  - id: Long
+  - name: String
+  - email: String
+  - password: String
+  - role: String
+  + register(): Boolean
+  + login(): Boolean
+  + logout(): void
+  + updateProfile(): Boolean
+  + changePassword(): Boolean
+}
+
+class Client {
+  - id: Long
+  - userId: Long
+  - phone: String
+  - birthDate: Date
+  - address: String
+  + viewMemberships(): List
+  + purchaseMembership(): Boolean
+  + bookTraining(): Boolean
+  + cancelBooking(): Boolean
+  + viewHistory(): List
+}
+
+class Trainer {
+  - id: Long
+  - userId: Long
+  - specialization: String
+  - experience: Integer
+  - phone: String
+  + viewSchedule(): List
+  + viewClients(): List
+  + recordAttendance(): Boolean
+  + updateSpecialization(): Boolean
+  + viewTrainingHistory(): List
+}
+
+class Membership {
+  - id: Long
+  - name: String
+  - price: Decimal
+  - durationDays: Integer
+  - description: String
+  + create(): Boolean
+  + update(): Boolean
+  + delete(): Boolean
+  + calculatePrice(): Decimal
+  + checkAvailability(): Boolean
+}
+
+class ClientMembership {
+  - id: Long
+  - clientId: Long
+  - membershipId: Long
+  - startDate: Date
+  - endDate: Date
+  + activate(): Boolean
+  + deactivate(): Boolean
+  + isActive(): Boolean
+  + extend(): Boolean
+  + calculateRemainingDays(): Integer
+}
+
+class TrainingSession {
+  - id: Long
+  - trainerId: Long
+  - title: String
+  - startTime: DateTime
+  - capacity: Integer
+  + create(): Boolean
+  + update(): Boolean
+  + cancel(): Boolean
+  + getAvailablePlaces(): Integer
+  + getParticipants(): List
+}
+
+class Booking {
+  - id: Long
+  - clientId: Long
+  - trainingSessionId: Long
+  - bookingDate: DateTime
+  - status: String
+  + create(): Boolean
+  + confirm(): Boolean
+  + cancel(): Boolean
+  + checkStatus(): String
+  + isDuplicate(): Boolean
+}
+
+class Payment {
+  - id: Long
+  - clientId: Long
+  - amount: Decimal
+  - paymentDate: DateTime
+  - status: String
+  + process(): Boolean
+  + confirm(): Boolean
+  + refund(): Boolean
+  + getStatus(): String
+  + generateReceipt(): String
+}
+
+class Attendance {
+  - id: Long
+  - bookingId: Long
+  - attendanceDate: DateTime
+  - status: String
+  - comment: String
+  + markPresent(): Boolean
+  + markAbsent(): Boolean
+  + updateStatus(): Boolean
+  + getDetails(): String
+  + isRecorded(): Boolean
+}
+
+class Report {
+  - id: Long
+  - title: String
+  - reportType: String
+  - createdAt: DateTime
+  - period: String
+  + generate(): Boolean
+  + exportPDF(): File
+  + exportCSV(): File
+  + getClientStatistics(): List
+  + getFinancialStatistics(): List
+}
+
+User <|-- Client
+User <|-- Trainer
+
+Client "1" -- "0..*" ClientMembership
+Membership "1" o-- "0..*" ClientMembership
+
+Client "1" -- "0..*" Booking
+TrainingSession "1" -- "0..*" Booking
+Trainer "1" -- "0..*" TrainingSession
+
+Client "1" -- "0..*" Payment
+ClientMembership "1" -- "0..*" Payment
+
+Booking "1" *-- "0..1" Attendance
+
+Report ..> Client
+Report ..> Attendance
+Report ..> Payment
+
+@enduml

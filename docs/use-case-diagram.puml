@@ -1,0 +1,64 @@
+
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Співробітник" as Employee
+actor "Адміністратор" as Admin
+actor "Тренер" as Trainer
+actor "Клієнт" as Client
+
+Employee <|-- Admin
+Employee <|-- Trainer
+
+rectangle "Система управління фітнес-центром" {
+
+    usecase "Керувати клієнтами" as UC1
+    usecase "Керувати тренерами" as UC2
+    usecase "Керувати абонементами" as UC3
+    usecase "Керувати розкладом" as UC4
+    usecase "Формувати звіти" as UC5
+    usecase "Генерувати звіт" as UC6
+
+    usecase "Переглядати розклад" as UC7
+    usecase "Переглядати клієнтів" as UC8
+    usecase "Фіксувати відвідування" as UC9
+
+    usecase "Реєструватися" as UC10
+    usecase "Придбати абонемент" as UC11
+    usecase "Переглядати абонементи" as UC12
+    usecase "Переглядати розклад занять" as UC13
+    usecase "Записуватися на тренування" as UC14
+    usecase "Керувати записом" as UC15
+    usecase "Скасувати запис" as UC16
+
+    usecase "Обробити оплату" as UC17
+    usecase "Перевірити активний абонемент" as UC18
+    usecase "Перевірити вільні місця" as UC19
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC4
+Admin --> UC5
+
+Trainer --> UC7
+Trainer --> UC8
+Trainer --> UC9
+
+Client --> UC10
+Client --> UC11
+Client --> UC12
+Client --> UC13
+Client --> UC14
+Client --> UC15
+
+UC5 .> UC6 : <<include>>
+UC11 .> UC17 : <<include>>
+UC14 .> UC18 : <<include>>
+UC14 .> UC19 : <<include>>
+UC16 .> UC15 : <<extend>>
+
+@enduml
